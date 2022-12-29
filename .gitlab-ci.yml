@@ -1,0 +1,55 @@
+stages: 
+  - build
+  - lint
+
+# Disable MR pipelines
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    - when: always
+
+variables:
+  NODE_IMAGE: node:18.12.1
+  ELIXIR_IMAGE: elixir:latest
+
+.backend:template:
+  image: ${ELIXIR_IMAGE}
+  before_script:
+    - cd backend/pt/
+
+.frontend:template:
+  image: ${NODE_IMAGE}
+  before_script:
+    - cd frontend
+
+build:backend:
+  stage: build
+  extends: .backend:template
+  artifacts: 
+    untracked: true
+  script:
+    - mix local.rebar --force
+    - mix local.hex --force
+    - mix deps.get
+    - mix compile
+
+lint:backend:
+  stage: lint
+  extends: .backend:template
+  script:
+    - mix local.rebar --force
+    - mix local.hex --force
+    - mix format --check-formatted
+
+build:frontend:
+  stage: build
+  extends: .frontend:template
+  script:
+    - echo 'building front-end'
+
+lint:frontend:
+  stage: lint
+  extends: .frontend:template
+  script:
+    - echo 'linting front-end'
