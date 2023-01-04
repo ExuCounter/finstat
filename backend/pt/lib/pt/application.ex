@@ -8,15 +8,9 @@ defmodule Pt.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
       Pt.Repo,
-      # Start the Telemetry supervisor
-      PtWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: Pt.PubSub},
-      # Start the Endpoint (http/https)
-      PtWeb.Endpoint
-      # Start a worker by calling: Pt.Worker.start_link(arg)
+      {Plug.Cowboy, scheme: :http, plug: Pt.ApiRouter, port: 4040}
+      # Starts a worker by calling: Pt.Worker.start_link(arg)
       # {Pt.Worker, arg}
     ]
 
@@ -24,13 +18,5 @@ defmodule Pt.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Pt.Supervisor]
     Supervisor.start_link(children, opts)
-  end
-
-  # Tell Phoenix to update the endpoint configuration
-  # whenever the application is updated.
-  @impl true
-  def config_change(changed, _new, removed) do
-    PtWeb.Endpoint.config_change(changed, removed)
-    :ok
   end
 end
