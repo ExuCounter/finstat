@@ -33,21 +33,10 @@ defmodule Pt.Router do
         }
       end
 
-      # def send_response(conn, :internal_server_error) do
-      #   conn |> send_resp(500, "Internal server error")
-      # end
-
-      # def send_response(conn, :error, changeset) do
-      #   conn
-      #   |> send_resp(
-      #     400,
-      #     Jason.encode!(traverse_changeset_errors(changeset))
-      #   )
-      # end
-
-      # def send_response(conn, :ok, payload) do
-      #   send_resp(conn, 201, payload)
-      # end
+      @impl Plug.ErrorHandler
+      def handle_errors(conn, %{kind: _kind, reason: _reason, stack: _stack}) do
+        send_resp(conn, conn.status, "Something went wrong")
+      end
     end
   end
 end

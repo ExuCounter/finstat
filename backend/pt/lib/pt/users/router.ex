@@ -8,16 +8,14 @@ defmodule Pt.User.Router do
 
     User.get_user_by_id(id)
     |> case do
-      {:error, status, message} ->
+      {:error, %{status: status, message: message}} ->
         send_resp(conn, status, message)
+
       user ->
         send_resp(
           conn,
           :found,
-          Jason.encode!(
-            user
-            |> Repo.preload([:categories])
-          )
+          Jason.encode!(user)
         )
     end
   end
@@ -29,7 +27,7 @@ defmodule Pt.User.Router do
       Multi.new()
       |> Multi.insert(
         :user,
-        User.register_changeset(%User{}, user)
+        User.register_user(user)
       )
       |> Multi.insert_all(
         :categories,

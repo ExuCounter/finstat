@@ -1,7 +1,5 @@
 defmodule Pt.User do
   alias Pt.{Repo, Category}
-  import Pt.Helpers, only: [is_uuid: 1]
-  import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
   use Pt, :schema
 
@@ -23,16 +21,15 @@ defmodule Pt.User do
     |> unique_constraint(:email)
   end
 
-  def get_user_by_id(id) when is_uuid(id) do
-    from(u in Pt.User,
-      select: u,
-      where: u.id == ^id,
-      preload: [categories: :entries]
-    )
-    |> Repo.all()
+  def register_user(user) do
+    Pt.User.register_changeset(%Pt.User{}, user)
   end
 
   def get_user_by_id(id) do
-    {:error, :not_found, "User with id:#{id} not found"}
+    Repo.get_by_id(Pt.User, id)
+    |> case do
+      {:ok, user} -> user |> Repo.preload(categories: :entries)
+      errors -> errors
+    end
   end
 end

@@ -6,24 +6,22 @@ defmodule Pt.Entry.Router do
   plug(:dispatch)
 
   get "/get" do
-    user_id = Map.get(conn.query_params, "user_id")
+    category_id = Map.get(conn.query_params, "category_id")
 
-    Entry.get_entries_by_user_id(user_id)
+    Entry.get_entries_by_category_id(category_id)
     |> case do
       {:error, status, message} ->
         send_resp(conn, status, message)
+
       entries ->
         send_resp(conn, :found, Jason.encode!(entries))
     end
   end
 
-  post "/income/create" do
+  post "/create" do
     %{body_params: entry} = conn
 
-    Entry.create_entry_changeset(
-      %Entry{},
-      entry
-    )
+    Entry.create_entry(entry)
     |> Repo.insert()
     |> case do
       {:ok, entry} ->
@@ -32,14 +30,26 @@ defmodule Pt.Entry.Router do
           :ok,
           Jason.encode!(entry)
         )
+
       {:error, changeset} ->
         send_resp(conn, :bad_request, Jason.encode!(traverse_changeset_errors(changeset)))
-      _ ->
-        send_resp(conn, :internal_server_error, "Internal server error")
+
+      errors ->
+        handle_errors(conn, errors)
+    end
+  end
+
+  delete "/delete" do
+    %{body_params: body_params} = conn
+
+    Entry.delete_entry_by_id(Map.get(body_params, "id"))
+    |> case do
+      {:error, %{message: message, status: status}} -> send_resp(conn, status, message)
+      _ -> send_resp(conn, :ok, "Entry successfuly deleted")
     end
   end
 
   match _ do
-    send_resp(conn, 404, "Not found")
+    send_resp(conn, 404, "Specified endpoint for entries not found")
   end
 end
