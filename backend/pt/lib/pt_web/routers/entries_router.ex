@@ -1,9 +1,6 @@
-defmodule Pt.Entry.Router do
+defmodule Pt.EntriesRouter do
   use Pt.Router
   alias Pt.{Repo, Entry}
-
-  plug(:match)
-  plug(:dispatch)
 
   get "/get" do
     category_id = Map.get(conn.query_params, "category_id")
@@ -33,9 +30,6 @@ defmodule Pt.Entry.Router do
 
       {:error, changeset} ->
         send_resp(conn, :bad_request, Jason.encode!(traverse_changeset_errors(changeset)))
-
-      errors ->
-        handle_errors(conn, errors)
     end
   end
 

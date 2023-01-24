@@ -1,10 +1,11 @@
-defmodule Pt.User.Router do
+defmodule Pt.UsersRouter do
   use Pt.Router
   alias Pt.{Repo, Category, User}
   alias Ecto.{Multi}
 
   get "/get" do
     id = Map.get(conn.query_params, "id")
+    IO.inspect(id)
 
     User.get_user_by_id(id)
     |> case do

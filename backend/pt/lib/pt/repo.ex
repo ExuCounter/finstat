@@ -15,6 +15,7 @@ defmodule Pt.Repo do
   end
 
   defoverridable get: 2, get: 3
+
   def get(query, id, opts \\ []) do
     super(query, id, opts)
   rescue

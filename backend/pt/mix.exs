@@ -7,9 +7,13 @@ defmodule Pt.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Run "mix help compile.app" to learn about applications.
   def application do
@@ -32,7 +36,10 @@ defmodule Pt.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.4"},
       {:recase, "~> 0.5"},
-      {:remix, "~> 0.0.1", only: :dev}
+      {:remix, "~> 0.0.1", only: :dev},
+      {:ex_machina, "~> 2.7.0"},
+      {:absinthe, "~> 1.5"},
+      {:absinthe_plug, "~> 1.5"}
     ]
   end
 end

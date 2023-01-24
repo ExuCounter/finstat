@@ -1,4 +1,4 @@
-defmodule Pt.Category.Router do
+defmodule Pt.CategoriesRouter do
   use Pt.Router
   alias Pt.{Category, Repo}
 

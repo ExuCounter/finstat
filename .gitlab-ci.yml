@@ -1,6 +1,7 @@
 stages: 
   - build
   - lint
+  - test
 
 # Disable MR pipelines
 workflow:
@@ -41,6 +42,14 @@ lint:backend:
     - mix local.rebar --force
     - mix local.hex --force
     - mix format --check-formatted
+
+test:backend:
+  stage: test
+  extends: .backend:template
+  script:
+    - mix local.rebar --force
+    - mix local.hex --force
+    - mix test
 
 build:frontend:
   stage: build
