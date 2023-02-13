@@ -52,9 +52,12 @@ defmodule Pt.Entry do
   end
 
   def create_entry(entry) do
-    Entry.create_entry_changeset(
-      %Entry{},
-      entry
-    )
+    changeset =
+      Entry.create_entry_changeset(
+        %Entry{},
+        entry
+      )
+
+    changeset |> Repo.insert()
   end
 end

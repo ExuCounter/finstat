@@ -44,10 +44,11 @@ defmodule Pt.Schema do
       arg(:password, non_null(:string))
 
       resolve(fn _parent, user, _resolution ->
-        with {:ok, user} <- User.register_user(user) |> Repo.insert() do
+        with {:ok, user} <- User.register_user(user) do
           {:ok, Repo.preload(user, categories: :entries)}
         else
-          {:error, _changeset} -> {:error, "Something went wrong"}
+          {:error, _} ->
+            {:error, "User is not registered"}
         end
       end)
     end

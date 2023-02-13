@@ -1,6 +1,6 @@
 defmodule Pt.EntriesRouter do
   use Pt.Router
-  alias Pt.{Repo, Entry}
+  alias Pt.{Entry}
 
   get "/get" do
     category_id = Map.get(conn.query_params, "category_id")
@@ -19,7 +19,6 @@ defmodule Pt.EntriesRouter do
     %{body_params: entry} = conn
 
     Entry.create_entry(entry)
-    |> Repo.insert()
     |> case do
       {:ok, entry} ->
         send_resp(

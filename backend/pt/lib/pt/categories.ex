@@ -34,14 +34,18 @@ defmodule Pt.Category do
 
     case response do
       {:ok, category} -> Repo.delete(category)
-      error -> error
+      {:error, errors} -> {:error, errors}
     end
   end
 
   def create_category(category) do
-    Category.create_category_changeset(
-      %Category{},
-      category
-    )
+    changeset =
+      Category.create_category_changeset(
+        %Category{},
+        category
+      )
+
+    changeset
+    |> Repo.insert()
   end
 end

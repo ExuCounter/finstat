@@ -4,9 +4,9 @@ defmodule Pt.CategoriesRouter do
 
   post "/create" do
     %{body_params: category} = conn
+    IO.inspect(conn)
 
     Category.create_category(category)
-    |> Repo.insert()
     |> case do
       {:ok, category} ->
         send_resp(
@@ -29,8 +29,9 @@ defmodule Pt.CategoriesRouter do
 
   delete "/delete" do
     %{body_params: body_params} = conn
+    category_id = Map.get(body_params, "id")
 
-    Category.delete_category_by_id(Map.get(body_params, "id"))
+    Category.delete_category_by_id(category_id)
     |> case do
       {:error, %{message: message, status: status}} -> send_resp(conn, status, message)
       _ -> send_resp(conn, :ok, "Category successfuly deleted")

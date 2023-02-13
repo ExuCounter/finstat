@@ -1,6 +1,6 @@
 Ecto.Adapters.SQL.Sandbox.mode(Pt.Repo, :manual)
 
-defmodule PtTest do
+defmodule GraphqlTest do
   use ExUnit.Case, async: true
   import Pt.Factory
   alias Pt.{Repo, Category, Entry, User}
