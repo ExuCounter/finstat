@@ -4,7 +4,6 @@ defmodule Pt.CategoriesRouter do
 
   post "/create" do
     %{body_params: category} = conn
-    IO.inspect(conn)
 
     Category.create_category(category)
     |> case do

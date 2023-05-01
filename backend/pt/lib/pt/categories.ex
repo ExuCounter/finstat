@@ -1,13 +1,13 @@
 defmodule Pt.Category do
   use Pt, :schema
   import Ecto.Changeset
-  alias Pt.{Entry, Repo}
+  alias Pt.{Entry, Repo, User}
   alias __MODULE__
 
   @derive {Jason.Encoder, only: [:id, :title, :entries]}
 
   schema "categories" do
-    field(:user_id, Ecto.UUID)
+    belongs_to(:user, User, foreign_key: :user_id, type: Ecto.UUID)
     field(:title, :string)
 
     has_many(:entries, Entry)

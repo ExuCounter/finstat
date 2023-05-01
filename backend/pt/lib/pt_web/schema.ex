@@ -1,6 +1,6 @@
 defmodule Pt.Schema do
   use Absinthe.Schema
-  alias Pt.{Category, User, Entry, Repo}
+  alias Pt.{Category, User, Entry, Repo, Account}
   import_types(Pt.Schema.Notation)
 
   query do
@@ -15,13 +15,48 @@ defmodule Pt.Schema do
       end)
     end
 
+    field :account, :account do
+      arg(:id, non_null(:id))
+
+      resolve(fn _parent, %{id: id}, _resolution ->
+        with {:ok, account} <- Account.get_account_by_id(id) do
+          {:ok, account}
+        end
+      end)
+    end
+
+    field :create_account, :account do
+      arg(:user_id, non_null(:id))
+      arg(:title, non_null(:string))
+      arg(:balance, non_null(:integer))
+      arg(:currency, non_null(:string))
+
+      resolve(fn _parent,
+                 %{user_id: user_id, title: title, balance: balance, currency: currency},
+                 _resolution ->
+        with {:ok, account} <-
+               Account.create_account(%{
+                 title: title,
+                 balance: balance,
+                 user_id: user_id,
+                 currency: currency
+               })
+               |> IO.inspect() do
+          {:ok, account}
+        else
+          {:error, _} ->
+            {:error, "Account is not created"}
+        end
+      end)
+    end
+
     @desc "Get user"
     field :user, :user do
       arg(:id, non_null(:id))
 
       resolve(fn _parent, %{id: id}, _resolution ->
         with user <- User.get_user_by_id(id) do
-          {:ok, Repo.preload(user, categories: :entries)}
+          {:ok, user}
         end
       end)
     end

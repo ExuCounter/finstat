@@ -7,4 +7,8 @@ config :pt, Pt.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
+config :pt, Pt.Guardian,
+  issuer: "pt",
+  secret_key: "Secret key. You can use `mix guardian.gen.secret` to get one"
+
 config :pt, ecto_repos: [Pt.Repo]

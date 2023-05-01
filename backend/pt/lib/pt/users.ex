@@ -1,5 +1,5 @@
 defmodule Pt.User do
-  alias Pt.{Repo, Category}
+  alias Pt.{Repo, Category, Account}
   alias __MODULE__
   import Ecto.Changeset
   use Pt, :schema
@@ -11,16 +11,16 @@ defmodule Pt.User do
     field(:email, :string)
     field(:password, :string)
     has_many(:categories, Category)
+    has_many(:accounts, Account)
 
     timestamps()
   end
 
   @required_fields ~w(email password)a
-  @optional_fields ~w(inserted_at updated_at)a
 
   def register_changeset(struct, payload \\ %{}) do
     struct
-    |> cast(payload, @required_fields ++ @optional_fields)
+    |> cast(payload, @required_fields)
     |> validate_required(@required_fields)
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email)
@@ -67,7 +67,7 @@ defmodule Pt.User do
   def get_user_by_id(id) do
     Repo.get_by_id(User, id)
     |> case do
-      {:ok, user} -> user |> Repo.preload(categories: :entries)
+      {:ok, user} -> user |> Repo.preload(categories: [:entries], accounts: [])
       errors -> errors
     end
   end
