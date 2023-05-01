@@ -18,7 +18,10 @@ defmodule Pt.MonobankApi do
 
   def fetch_client_account_statement(%{accountId: accountId, from: from, to: to}, token) do
     api_url = resolve_client_account_statement_api_url(accountId, from, to)
-    HTTPoison.get!(api_url, [{"X-Token", token}]) |> handle_response()
+
+    with {:ok, entries} <- HTTPoison.get!(api_url, [{"X-Token", token}]) |> handle_response() do
+      entries
+    end
   end
 
   def fetch_client_account_statement_for_last_week(accountId, token) do

@@ -1,5 +1,5 @@
 defmodule Pt.Plug.AuthRouter do
-  # import Plug.Conn
+  import Plug.Conn
 
   def init(opts) do
     opts
@@ -18,12 +18,14 @@ defmodule Pt.Plug.AuthRouter do
         key == "authorization"
       end)
 
-    if status == :ok do
-      if token do
-        conn
-      end
-    else
-      conn
-    end
+    # assign(conn, :hello, :world)
+
+    # if status == :ok do
+    #   if token do
+    #     conn
+    #   end
+    # else
+    #   conn
+    # end
   end
 end
