@@ -26,7 +26,7 @@ defmodule Pt.MixProject do
   end
 
   defp applications(:dev), do: applications(:all) ++ [:remix]
-  defp applications(_all), do: [:logger]
+  defp applications(_all), do: [:logger, :httpoison]
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
@@ -39,7 +39,10 @@ defmodule Pt.MixProject do
       {:remix, "~> 0.0.1", only: :dev},
       {:ex_machina, "~> 2.7.0"},
       {:absinthe, "~> 1.5"},
-      {:absinthe_plug, "~> 1.5"}
+      {:absinthe_plug, "~> 1.5"},
+      {:httpoison, "~> 2.0"},
+      {:guardian, "~> 2.0"},
+      {:timex, "~> 3.0"}
     ]
   end
 end
