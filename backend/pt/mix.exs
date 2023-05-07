@@ -42,7 +42,8 @@ defmodule Pt.MixProject do
       {:absinthe_plug, "~> 1.5"},
       {:httpoison, "~> 2.0"},
       {:guardian, "~> 2.0"},
-      {:timex, "~> 3.0"}
+      {:timex, "~> 3.0"},
+      {:argon2_elixir, "~> 3.0"}
     ]
   end
 end

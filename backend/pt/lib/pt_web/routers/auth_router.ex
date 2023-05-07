@@ -1,5 +1,6 @@
 defmodule Pt.Plug.AuthRouter do
   import Plug.Conn
+  alias Pt.{Users}
 
   def init(opts) do
     opts
@@ -13,12 +14,14 @@ defmodule Pt.Plug.AuthRouter do
   end
 
   def call(conn, _opts) do
-    {status, token} =
-      Enum.find(conn.req_headers, {:error, :not_found}, fn {key, _value} ->
-        key == "authorization"
-      end)
+    # {status, token} =
+    #   Enum.find(conn.req_headers, {:error, :not_found}, fn {key, _value} ->
+    #     key == "authorization"
+    #   end)
 
-    # assign(conn, :hello, :world)
+    conn
+
+    assign(conn, :hello, :world)
 
     # if status == :ok do
     #   if token do
